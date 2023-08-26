@@ -1,7 +1,7 @@
 #pragma once
 
-#include <concepts>
 #include <compare>
+#include <concepts>
 #include <cstdint>
 #include <span>
 
@@ -57,9 +57,8 @@ namespace usb_asio
 
         void open(usb_device_info const& info) noexcept
         {
-            try_with_ec([&](auto& ec) {
-                open(info, ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { open(info, ec); });
         }
 
         void open(usb_device_info const& info, error_code& ec)
@@ -83,11 +82,15 @@ namespace usb_asio
             }
         }
 
+      // void get_configuration(error_code& ec)
+      // {
+      //     libusb_try(ec, &::libusb_get_configuration, handle());
+      // }
+
         void set_configuration(std::uint8_t const configuration)
         {
-            try_with_ec([&](auto& ec) {
-                set_configuration(configuration, ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { set_configuration(configuration, ec); });
         }
 
         void set_configuration(
@@ -106,16 +109,16 @@ namespace usb_asio
                 executor_,
                 service_->blocking_op_executor(),
                 std::forward<CompletionToken>(token),
-                [configuration, handle = handle()](auto& ec) {
+                [configuration, handle = handle()](auto& ec)
+                {
                     libusb_try(ec, &::libusb_set_configuration, handle, configuration);
                 });
         }
 
         void clear_halt(std::uint8_t const endpoint)
         {
-            try_with_ec([&](auto& ec) {
-                clear_halt(endpoint, ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { clear_halt(endpoint, ec); });
         }
 
         void clear_halt(
@@ -134,16 +137,16 @@ namespace usb_asio
                 executor_,
                 service_->blocking_op_executor(),
                 std::forward<CompletionToken>(token),
-                [endpoint, handle = handle()](auto& ec) {
+                [endpoint, handle = handle()](auto& ec)
+                {
                     libusb_try(ec, &::libusb_clear_halt, handle, endpoint);
                 });
         }
 
         void reset_device()
         {
-            try_with_ec([&](auto& ec) {
-                reset_device(ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { reset_device(ec); });
         }
 
         void reset_device(error_code& ec) noexcept
@@ -158,7 +161,8 @@ namespace usb_asio
                 executor_,
                 service_->blocking_op_executor(),
                 std::forward<CompletionToken>(token),
-                [handle = handle()](auto& ec) {
+                [handle = handle()](auto& ec)
+                {
                     libusb_try(ec, &::libusb_reset_device, handle);
                 });
         }
@@ -167,9 +171,8 @@ namespace usb_asio
             std::uint32_t const num_streams,
             std::span<std::uint8_t const> const endpoints)
         {
-            try_with_ec([&](auto& ec) {
-                alloc_streams(num_streams, endpoints, ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { alloc_streams(num_streams, endpoints, ec); });
         }
 
         void alloc_streams(
@@ -189,9 +192,8 @@ namespace usb_asio
         void free_streams(
             std::span<std::uint8_t const> const endpoints)
         {
-            try_with_ec([&](auto& ec) {
-                free_streams(endpoints, ec);
-            });
+            try_with_ec([&](auto& ec)
+                        { free_streams(endpoints, ec); });
         }
 
         void free_streams(
